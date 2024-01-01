@@ -5,6 +5,10 @@ import android.content.pm.ActivityInfo
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.room.Room
+import be.heh.qrscannerproject.database.AppDatabase
+import be.heh.qrscannerproject.database.Devices
+import be.heh.qrscannerproject.database.User
 import be.heh.qrscannerproject.databinding.ActivityMainBinding
 import com.google.zxing.integration.android.IntentIntegrator
 import org.json.JSONException
@@ -13,6 +17,7 @@ import org.json.JSONObject
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private var qrScanIntegrator: IntentIntegrator? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
@@ -23,6 +28,17 @@ class MainActivity : AppCompatActivity() {
 
         setOnClickListener()
         setupScanner()
+        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "user-database").build()
+        val userDao = db.userDao()
+        val devicesDao = db.devicesDao()
+        val u1 = User(1, "admin@gmail.com", "1234", true)
+        val u2 = User(2, "user@gmail.com", "1234", false)
+        userDao.insertAll(u1, u2)
+        val d1 = Devices(1, "PC", "HP", "https://www.hp.com")
+        val d2 = Devices(2, "PC", "DELL", "https://www.dell.com")
+        val d3 = Devices(3, "PC", "LENOVO", "https://www.lenovo.com")
+        devicesDao.insertAll(d1, d2, d3)
+
     }
 
     private fun setupScanner() {

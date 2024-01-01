@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Devices(
-    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "reference" ) @PrimaryKey(autoGenerate = true) val uid: Int = 0,
     @ColumnInfo(name = "type") val type: String?,
     @ColumnInfo(name = "marque") val marque: String?,
     @ColumnInfo(name = "web") val web: String?
