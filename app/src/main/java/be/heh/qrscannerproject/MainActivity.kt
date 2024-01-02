@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             val dao = db.userDao()
             val dbL = dao?.getByLogin(l)
             var uL = User(dbL?.uid?:0, dbL?.login?:"INDEFINI", dbL?.mail?:"INDEFINI",
-                dbL?.password?:"INDEFINI", dbL?.admin?:false)
+                dbL?.password?:"INDEFINI", dbL?.role?: "User")
             binding.tvLoginMain.setTextColor(Color.RED)
             binding.tvMainPwd.setTextColor(Color.RED)
             binding.tvEmailMain.setTextColor(Color.RED)
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun lire() {
-        AsyncTask.execute({
+        AsyncTask.execute {
             val db = Room.databaseBuilder(
                 applicationContext,
                 AppDatabase::class.java, "MyDataBase"
@@ -65,32 +65,39 @@ class MainActivity : AppCompatActivity() {
             val dao = db.userDao()
             val liste = dao.get()
             liste.forEach { item -> Log.i("READ", item.toString()) }
-        })
-
+        }
     }
 
     private fun ecrire() {
-        try {
-            val u = User(0, binding.etChildrenLogin.text.toString(), binding.etChildrenEmail.text.toString(), binding.etChildrenPwd.text.toString(), false)
-            AsyncTask.execute {
-                val db = Room.databaseBuilder(
-                    applicationContext,
-                    AppDatabase::class.java, "MyDataBase"
-                ).build()
-                val dao = db.userDao()
-                val u1 = User(0, u.login, u.password, u.mail, false)
-                if (u.login?.let { dao.getByLogin(it) } != null) {
-                    Toast.makeText(this,"user exist",Toast.LENGTH_LONG).show()
-                }
-                else {
-                dao.insertAll(u1)}
+            var err : String = ""
+            val u = User(0, binding.etChildrenLogin.text.toString(), binding.etChildrenEmail.text.toString(),
+                binding.etChildrenPwd.text.toString(), "SuperAdmin")
+
+            AsyncTask.execute() {
+                try {
+                    val db = Room.databaseBuilder(
+                        applicationContext,
+                        AppDatabase::class.java, "MyDataBase"
+                    ).build()
+                    val dao = db.userDao()
+                    val u1 = User(0, u.login, u.mail, u.password, "User")
+                    Log.i("Lire", "Ratioooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+                    dao.insertAll(u1)
             }
-            Toast.makeText(this,u.toString(),Toast.LENGTH_LONG).show()
-        }
-        catch (e: Exception){
-            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show()
+            catch (e: Exception){
+                err = e.message.toString()
+            }
         }
 
+        try {
+            if (err == ""){
+                Toast.makeText(this,"OK",Toast.LENGTH_LONG).show()}
+            else {
+                Toast.makeText(this,err,Toast.LENGTH_LONG).show()}
+        }
+        catch (e: Exception){
+            Toast.makeText(this,e.message.toString(),Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun lireBDD(){
@@ -98,8 +105,8 @@ class MainActivity : AppCompatActivity() {
             val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "user-database").build()
             val userDao = db.userDao()
             val devicesDao = db.devicesDao()
-            val u1 = User(1, "admin", "admin@gmail.com", "1234", true)
-            val u2 = User(2, "user", "user@gmail.com", "1234", false)
+            val u1 = User(1, "admin", "admin@gmail.com", "1234", "Admin")
+            val u2 = User(2, "user", "user@gmail.com", "1234", "User")
 
             val d1 = Devices(1, "PC", "HP",  "pc hp", "https://www.hp.com", false, "")
             val d2 = Devices(2, "PC", "DELL", "pc dell", "https://www.dell.com", false, "")

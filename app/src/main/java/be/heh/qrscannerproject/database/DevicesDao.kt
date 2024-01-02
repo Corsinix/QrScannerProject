@@ -17,7 +17,7 @@ interface DevicesDao {
     fun findByProduit(produit: String): Devices
     @Query("SELECT * FROM devices WHERE emprunt LIKE (:emprunt)")
     fun findByEmprunt(emprunt: Boolean): Devices
-    @Query("SELECT * FROM devices WHERE dernier_emprunt LIKE (:dernier_emprunt) AND emprunt LIKE type")
+    @Query("SELECT * FROM devices WHERE dernier_emprunt LIKE (:dernier_emprunt) AND emprunt = 1")
     fun findByDernierEmprunt(dernier_emprunt: String): Devices
     @Query("SELECT * FROM devices ORDER BY :sort ASC")
     fun getAllSorted(sort: String): List<Devices>

@@ -9,14 +9,10 @@ import androidx.room.PrimaryKey
         indices = [Index(value = ["mail"], unique = true), Index("uid"), ]
 )
 data class User(
-    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "uid") @PrimaryKey(autoGenerate = true) val uid: Int=0,
     @ColumnInfo(name = "login") val login: String?,
     @ColumnInfo(name = "mail") val mail: String?,
     @ColumnInfo(name = "password") val password: String?,
-    @ColumnInfo(name = "isadmin") val admin: Boolean?
-){
-    enum class Role {
-        ADMIN, USER
-    }
-}
+    @ColumnInfo(name = "role") val role: String?
+)
 
