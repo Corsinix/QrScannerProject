@@ -14,8 +14,8 @@ interface UserDao {
     fun get(): List<User>
     @Query("SELECT * FROM users WHERE uid LIKE (:userIds)")
     fun getByIds(userIds: Int): User
-    @Query("SELECT * FROM users WHERE login LIKE (:login)")
-    fun getByLogin(login: String): User
+    @Query("SELECT * FROM users WHERE mail LIKE (:mail)")
+    fun getByMail(mail: String): User
 
     //insert, update, delete
     @Insert

@@ -17,18 +17,21 @@
         android:text="**INSCRIPTION** " />
 
     <TextView
-        android:id="@+id/tv_login_main"
+        android:id="@+id/tv_email_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
-        android:text="LOGIN :" />
+        android:gravity="center_vertical"
+        android:text="EMAIL :" />
 
     <EditText
-        android:id="@+id/et_children_login"
+        android:id="@+id/et_children_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
+        android:autoLink="email"
+        android:text="your mail"
         android:foregroundGravity="center_vertical"
         android:gravity="center_vertical" />
 
@@ -48,25 +51,9 @@
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
         android:gravity="center_vertical"
-        android:password="true" />
+        android:password="true"
+        android:text="password"/>
 
-    <TextView
-        android:id="@+id/tv_email_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
-        android:text="EMAIL :" />
-
-    <EditText
-        android:id="@+id/et_children_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:autoLink="email"
-        android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical" />
 
     <Button
         android:id="@+id/bt_Ecrire_main"
@@ -74,9 +61,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:onClick="xmlClickEvent"
-        android:text="==> Ecrire !" />
+        android:text="sing in" />
 
     <Button
         android:id="@+id/bt_Lire_main"
@@ -84,9 +71,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:onClick="xmlClickEvent"
-        android:text="==> Lire" />
+        android:text="Login" />
 
     <Button
         android:id="@+id/bt_LireLogin_main"
@@ -94,9 +81,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_marginBottom="16dp"
-        android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:onClick="xmlClickEvent"
-        android:text="==> Lire ce Login" />
+        android:text="Add a admin" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -8,8 +8,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "devices",
-    indices = [Index(value = ["uid"], unique = true), Index("type"), Index("marque"), Index("produit"), Index("web"), Index("emprunt"), Index("dernier_emprunt") ],
-    foreignKeys  = [ForeignKey(entity = User::class, parentColumns = ["mail"], childColumns = ["dernier_emprunt"], onDelete = ForeignKey.RESTRICT)]
+    indices = [Index("uid")]
 )
 data class Devices(
     @ColumnInfo(name = "uid" ) @PrimaryKey(autoGenerate = true) val uid: Int = 0,
@@ -19,8 +18,4 @@ data class Devices(
     @ColumnInfo(name = "web") val web: String?,
     @ColumnInfo(name = "emprunt") val emprunt: Boolean?,
     @ColumnInfo(name = "dernier_emprunt") val dernier_emprunt: String?
-) {
-    enum class Type {
-        Smatphone, Tablet
-    }
-}
+)

@@ -17,62 +17,69 @@ import be.heh.qrscannerproject.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
+    // private lateinit var binding: ActivityMainBinding
     private lateinit var binding: ActivityMainBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-
     }
     fun xmlClickEvent(v: View) {
         when (v.id) {
         // R.id.bt_Ecrire_main -> {
-            binding.btEcrireMain.id -> ecrire()
-            binding.btLireMain.id -> lire()
-            binding.btLireLoginMain.id -> lireCeLogin(binding.etChildrenLogin.text.toString())
+            binding.btEcrireMain.id -> sing_in()
+            binding.btLireMain.id -> login()
+            binding.btLireLoginMain.id -> ad_admin(binding.etChildrenEmail.text.toString())
         }
     }
 
-    private fun lireCeLogin(l: String) {
+    private fun ad_admin(mail: String) {
         AsyncTask.execute {
             val db = Room.databaseBuilder(
                 applicationContext,
                 AppDatabase::class.java, "MyDataBase"
             ).build()
             val dao = db.userDao()
-            val dbL = dao?.getByLogin(l)
-            var uL = User(dbL?.uid?:0, dbL?.login?:"INDEFINI", dbL?.mail?:"INDEFINI",
+            val dbL = dao?.getByMail(mail)
+            var uL = User(dbL?.uid?:0, dbL?.mail?:"INDEFINI",
                 dbL?.password?:"INDEFINI", dbL?.role?: "User")
-            binding.tvLoginMain.setTextColor(Color.RED)
-            binding.tvMainPwd.setTextColor(Color.RED)
             binding.tvEmailMain.setTextColor(Color.RED)
-            binding.tvLoginMain.text = "LOGIN : " + uL.login
+            binding.tvMainPwd.setTextColor(Color.RED)
             binding.tvMainPwd.text = "PASSWORD : " + uL.password
             binding.tvEmailMain.text = "EMAIL : " + uL.mail
         }
     }
 
-    private fun lire() {
+    private fun login() {
         AsyncTask.execute {
             val db = Room.databaseBuilder(
                 applicationContext,
                 AppDatabase::class.java, "MyDataBase"
             ).build()
             val dao = db.userDao()
-            val liste = dao.get()
-            liste.forEach { item -> Log.i("READ", item.toString()) }
+            val dbL = dao?.getByMail(binding.etChildrenEmail.text.toString())
+            var uL = User(dbL?.uid?:0, dbL?.mail?:"INDEFINI",
+                dbL?.password?:"INDEFINI", dbL?.role?: "User")
+            if (uL.password == binding.etChildrenPwd.text.toString()){
+                val intent = Intent(this, ScannerActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+            else{
+                binding.tvEmailMain.setTextColor(Color.RED)
+                binding.tvMainPwd.setTextColor(Color.RED)
+                binding.tvMainPwd.text = "PASSWORD : " + uL.password
+                binding.tvEmailMain.text = "EMAIL : " + uL.mail
+            }
         }
     }
 
-    private fun ecrire() {
+    private fun sing_in() {
             var err : String = ""
-            val u = User(0, binding.etChildrenLogin.text.toString(), binding.etChildrenEmail.text.toString(),
+            val u = User(0, binding.etChildrenEmail.text.toString(),
                 binding.etChildrenPwd.text.toString(), "SuperAdmin")
-
             AsyncTask.execute() {
                 try {
                     val db = Room.databaseBuilder(
@@ -80,39 +87,21 @@ class MainActivity : AppCompatActivity() {
                         AppDatabase::class.java, "MyDataBase"
                     ).build()
                     val dao = db.userDao()
-                    val u1 = User(0, u.login, u.mail, u.password, "User")
-                    Log.i("Lire", "Ratioooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
+                    val u1 = User(0, u.mail, u.password, "User")
                     dao.insertAll(u1)
             }
             catch (e: Exception){
                 err = e.message.toString()
             }
         }
-
         try {
             if (err == ""){
-                Toast.makeText(this,"OK",Toast.LENGTH_LONG).show()}
+                Toast.makeText(this,"User already exist",Toast.LENGTH_LONG).show()}
             else {
                 Toast.makeText(this,err,Toast.LENGTH_LONG).show()}
         }
         catch (e: Exception){
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_LONG).show()
-        }
-    }
-
-    private fun lireBDD(){
-        AsyncTask.execute{
-            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "user-database").build()
-            val userDao = db.userDao()
-            val devicesDao = db.devicesDao()
-            val u1 = User(1, "admin", "admin@gmail.com", "1234", "Admin")
-            val u2 = User(2, "user", "user@gmail.com", "1234", "User")
-
-            val d1 = Devices(1, "PC", "HP",  "pc hp", "https://www.hp.com", false, "")
-            val d2 = Devices(2, "PC", "DELL", "pc dell", "https://www.dell.com", false, "")
-            val d3 = Devices(3, "PC", "LENOVO", "pc lenovo", "https://www.lenovo.com", false, "")
-            devicesDao.insertAll(d1, d2, d3)
-            userDao.insertAll(u1, u2)
         }
     }
 }
