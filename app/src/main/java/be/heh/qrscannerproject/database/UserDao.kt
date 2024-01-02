@@ -4,19 +4,24 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 
 
 @Dao
 interface UserDao {
+    //select
     @Query("SELECT * FROM users")
-    fun getAll(): List<User>
+    fun get(): List<User>
+    @Query("SELECT * FROM users WHERE uid LIKE (:userIds)")
+    fun getByIds(userIds: Int): User
+    @Query("SELECT * FROM users WHERE login LIKE (:login)")
+    fun getByLogin(login: String): User
 
-    @Query("SELECT * FROM users WHERE uid IN (:userIds)")
-    fun loadAllByIds(userIds: IntArray): List<User>
-
+    //insert, update, delete
     @Insert
     fun insertAll(vararg users: User)
-
     @Delete
     fun delete(user: User)
+    @Update
+    fun update(user: User)
 }

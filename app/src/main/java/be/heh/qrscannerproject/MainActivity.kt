@@ -2,84 +2,110 @@ package be.heh.qrscannerproject
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
+import android.graphics.Color
+import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.room.Room
 import be.heh.qrscannerproject.database.AppDatabase
 import be.heh.qrscannerproject.database.Devices
 import be.heh.qrscannerproject.database.User
 import be.heh.qrscannerproject.databinding.ActivityMainBinding
-import com.google.zxing.integration.android.IntentIntegrator
-import org.json.JSONException
-import org.json.JSONObject
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private var qrScanIntegrator: IntentIntegrator? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        setOnClickListener()
-        setupScanner()
-        val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "user-database").build()
-        val userDao = db.userDao()
-        val devicesDao = db.devicesDao()
-        val u1 = User(1, "admin@gmail.com", "1234", true)
-        val u2 = User(2, "user@gmail.com", "1234", false)
-        userDao.insertAll(u1, u2)
-        val d1 = Devices(1, "PC", "HP", "https://www.hp.com")
-        val d2 = Devices(2, "PC", "DELL", "https://www.dell.com")
-        val d3 = Devices(3, "PC", "LENOVO", "https://www.lenovo.com")
-        devicesDao.insertAll(d1, d2, d3)
+    }
+    fun xmlClickEvent(v: View) {
+        when (v.id) {
+        // R.id.bt_Ecrire_main -> {
+            binding.btEcrireMain.id -> ecrire()
+            binding.btLireMain.id -> lire()
+            binding.btLireLoginMain.id -> lireCeLogin(binding.etChildrenLogin.text.toString())
+        }
+    }
+
+    private fun lireCeLogin(l: String) {
+        AsyncTask.execute {
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "MyDataBase"
+            ).build()
+            val dao = db.userDao()
+            val dbL = dao?.getByLogin(l)
+            var uL = User(dbL?.uid?:0, dbL?.login?:"INDEFINI", dbL?.mail?:"INDEFINI",
+                dbL?.password?:"INDEFINI", dbL?.admin?:false)
+            binding.tvLoginMain.setTextColor(Color.RED)
+            binding.tvMainPwd.setTextColor(Color.RED)
+            binding.tvEmailMain.setTextColor(Color.RED)
+            binding.tvLoginMain.text = "LOGIN : " + uL.login
+            binding.tvMainPwd.text = "PASSWORD : " + uL.password
+            binding.tvEmailMain.text = "EMAIL : " + uL.mail
+        }
+    }
+
+    private fun lire() {
+        AsyncTask.execute({
+            val db = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java, "MyDataBase"
+            ).build()
+            val dao = db.userDao()
+            val liste = dao.get()
+            liste.forEach { item -> Log.i("READ", item.toString()) }
+        })
 
     }
 
-    private fun setupScanner() {
-        qrScanIntegrator = IntentIntegrator(this)
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT)
-    }
-
-    private fun setOnClickListener() {
-        binding.btnScan.setOnClickListener { performAction() }
-    }
-
-    private fun performAction() {
-        // Code to perform action when button is clicked.
-        qrScanIntegrator?.initiateScan()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null) {
-            // If QRCode has no data.
-            if (result.contents == null) {
-                Toast.makeText(this, getString(R.string.result_not_found), Toast.LENGTH_LONG).show()
-            } else {
-                // If QRCode contains data.
-                try {
-                    // Converting the data to json format
-                    val obj = JSONObject(result.contents)
-
-                    // Show values in UI.
-                    binding.name.text = obj.getString("name")
-                    binding.siteName.text = obj.getString("value")
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-
-                    // Data not in the expected format. So, whole object as toast message.
-                    Toast.makeText(this, result.contents, Toast.LENGTH_LONG).show()
+    private fun ecrire() {
+        try {
+            val u = User(0, binding.etChildrenLogin.text.toString(), binding.etChildrenEmail.text.toString(), binding.etChildrenPwd.text.toString(), false)
+            AsyncTask.execute {
+                val db = Room.databaseBuilder(
+                    applicationContext,
+                    AppDatabase::class.java, "MyDataBase"
+                ).build()
+                val dao = db.userDao()
+                val u1 = User(0, u.login, u.password, u.mail, false)
+                if (u.login?.let { dao.getByLogin(it) } != null) {
+                    Toast.makeText(this,"user exist",Toast.LENGTH_LONG).show()
                 }
+                else {
+                dao.insertAll(u1)}
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data)
+            Toast.makeText(this,u.toString(),Toast.LENGTH_LONG).show()
+        }
+        catch (e: Exception){
+            Toast.makeText(this,e.toString(),Toast.LENGTH_LONG).show()
+        }
+
+    }
+
+    private fun lireBDD(){
+        AsyncTask.execute{
+            val db = Room.databaseBuilder(applicationContext, AppDatabase::class.java, "user-database").build()
+            val userDao = db.userDao()
+            val devicesDao = db.devicesDao()
+            val u1 = User(1, "admin", "admin@gmail.com", "1234", true)
+            val u2 = User(2, "user", "user@gmail.com", "1234", false)
+
+            val d1 = Devices(1, "PC", "HP",  "pc hp", "https://www.hp.com", false, "")
+            val d2 = Devices(2, "PC", "DELL", "pc dell", "https://www.dell.com", false, "")
+            val d3 = Devices(3, "PC", "LENOVO", "pc lenovo", "https://www.lenovo.com", false, "")
+            devicesDao.insertAll(d1, d2, d3)
+            userDao.insertAll(u1, u2)
         }
     }
 }

@@ -1,56 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center"
+        android:text="**INSCRIPTION** " />
+
+    <TextView
+        android:id="@+id/tv_login_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:text="LOGIN :" />
+
+    <EditText
+        android:id="@+id/et_children_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/tv_main_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="PASSWORD :" />
+
+    <EditText
+        android:id="@+id/et_children_pwd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:password="true" />
+
+    <TextView
+        android:id="@+id/tv_email_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:text="EMAIL :" />
+
+    <EditText
+        android:id="@+id/et_children_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:autoLink="email"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical" />
+
     <Button
-        android:id="@+id/btnScan"
+        android:id="@+id/bt_Ecrire_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/scan_qr_code"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:onClick="xmlClickEvent"
+        android:text="==> Ecrire !" />
 
-    <TextView
-        android:id="@+id/nameKey"
+    <Button
+        android:id="@+id/bt_Lire_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnScan" />
+        android:layout_gravity="center_vertical"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:onClick="xmlClickEvent"
+        android:text="==> Lire" />
 
-    <TextView
-        android:id="@+id/name"
+    <Button
+        android:id="@+id/bt_LireLogin_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameKey" />
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:foregroundGravity="center_vertical"
+        android:gravity="center_vertical"
+        android:onClick="xmlClickEvent"
+        android:text="==> Lire ce Login" />
 
-    <TextView
-        android:id="@+id/site_name_key"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="value"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
-
-    <TextView
-        android:id="@+id/site_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/empty"
-        android:textStyle="bold|italic"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/site_name_key" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
