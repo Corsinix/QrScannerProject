@@ -7,24 +7,21 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Bouton pour consulter la base de données des produits -->
     <Button
         android:id="@+id/btnConsultProducts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Consulter la base de données des produits"
-        android:onClick="consultProducts" />
+        android:onClick="xmlClickEvent" />
 
-    <!-- Bouton pour consulter la base de données des utilisateurs (visible seulement pour les superadmins) -->
     <Button
         android:id="@+id/btnConsultUsers"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="consultUsers"
+        android:onClick="xmlClickEvent"
         android:text="Consulter la base de données des utilisateurs"
         android:visibility="gone" />
 
-    <!-- Formulaire pour ajouter un objet dans la base de données -->
     <EditText
         android:id="@+id/editTextType"
         android:layout_width="match_parent"
@@ -49,20 +46,18 @@
         android:layout_height="wrap_content"
         android:hint="Web" />
 
-    <!-- Bouton pour lancer le scan d'ajout -->
     <Button
         android:id="@+id/btnScanAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Scan d'ajout"
-        android:onClick="launchAddScan" />
+        android:onClick="xmlClickEvent" />
 
-    <!-- Bouton pour le scan d'emprunt -->
     <Button
         android:id="@+id/btnScanEmprunt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Scan d'emprunt"
-        android:onClick="launchEmpruntScan" />
+        android:onClick="xmlClickEvent" />
 
 </LinearLayout>

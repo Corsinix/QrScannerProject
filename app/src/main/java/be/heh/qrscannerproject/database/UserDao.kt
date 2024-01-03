@@ -16,6 +16,8 @@ interface UserDao {
     fun getByIds(userIds: Int): User
     @Query("SELECT * FROM users WHERE mail LIKE (:mail)")
     fun getByMail(mail: String): User
+    @Query("SELECT * FROM users WHERE role != 'SuperAdmin'")
+    fun getwithoutSuperAdmin(): List<User>
 
     //insert, update, delete
     @Insert

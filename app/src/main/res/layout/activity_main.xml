@@ -75,14 +75,5 @@
         android:onClick="xmlClickEvent"
         android:text="Login" />
 
-    <Button
-        android:id="@+id/bt_LireLogin_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginBottom="16dp"
-        android:gravity="center"
-        android:onClick="xmlClickEvent"
-        android:text="Add a admin" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

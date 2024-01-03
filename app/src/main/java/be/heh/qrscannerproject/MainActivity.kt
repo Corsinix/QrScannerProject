@@ -25,32 +25,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+        createSuperAdmin()
     }
+
+
+
     fun xmlClickEvent(v: View) {
         when (v.id) {
         // R.id.bt_Ecrire_main -> {
             binding.btEcrireMain.id -> sing_in()
             binding.btLireMain.id -> login()
-            binding.btLireLoginMain.id -> ad_admin(binding.etChildrenEmail.text.toString())
         }
     }
 
-    private fun ad_admin(mail: String) {
-        AsyncTask.execute {
-            val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java, "MyDataBase"
-            ).build()
-            val dao = db.userDao()
-            val dbL = dao?.getByMail(mail)
-            var uL = User(dbL?.uid?:0, dbL?.mail?:"INDEFINI",
-                dbL?.password?:"INDEFINI", dbL?.role?: "User")
-            binding.tvEmailMain.setTextColor(Color.RED)
-            binding.tvMainPwd.setTextColor(Color.RED)
-            binding.tvMainPwd.text = "PASSWORD : " + uL.password
-            binding.tvEmailMain.text = "EMAIL : " + uL.mail
-        }
-    }
 
     private fun login() {
         AsyncTask.execute {
@@ -61,9 +48,10 @@ class MainActivity : AppCompatActivity() {
             val dao = db.userDao()
             val dbL = dao?.getByMail(binding.etChildrenEmail.text.toString())
             var uL = User(dbL?.uid?:0, dbL?.mail?:"INDEFINI",
-                dbL?.password?:"INDEFINI", dbL?.role?: "User")
+                dbL?.password?:"INDEFINI", dbL?.role?:"INDEFINI")
             if (uL.password == binding.etChildrenPwd.text.toString()){
-                val intent = Intent(this, ScannerActivity::class.java)
+                val intent = Intent(this, MenuPrincipal::class.java)
+                intent.putExtra("userRole", uL.role)
                 startActivity(intent)
                 finish()
             }
@@ -95,13 +83,25 @@ class MainActivity : AppCompatActivity() {
             }
         }
         try {
-            if (err == ""){
-                Toast.makeText(this,"User already exist",Toast.LENGTH_LONG).show()}
-            else {
-                Toast.makeText(this,err,Toast.LENGTH_LONG).show()}
         }
         catch (e: Exception){
             Toast.makeText(this,e.message.toString(),Toast.LENGTH_LONG).show()
+        }
+    }
+    private fun createSuperAdmin() {
+        AsyncTask.execute() {
+            try {
+                val db = Room.databaseBuilder(
+                    applicationContext,
+                    AppDatabase::class.java, "MyDataBase"
+                ).build()
+                val dao = db.userDao()
+                val u = User(0, "SuperAdmin@gmail.com", "AdminSuper", "SuperAdmin")
+                val u2 = User(0, "Admin@gmail.com", "Admin", "Admin")
+                dao.insertAll(u)
+            } catch (e: Exception) {
+        Log.d("MainActivity", e.message.toString())
+            }
         }
     }
 }

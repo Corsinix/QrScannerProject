@@ -19,6 +19,9 @@
         android:theme="@style/Theme.QrScannerProject"
         tools:targetApi="31">
         <activity
+            android:name=".ListAllUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".MenuPrincipal"
             android:exported="false" />
         <activity
