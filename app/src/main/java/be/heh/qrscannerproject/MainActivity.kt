@@ -98,7 +98,12 @@ class MainActivity : AppCompatActivity() {
                 val dao = db.userDao()
                 val u = User(0, "SuperAdmin@gmail.com", "AdminSuper", "SuperAdmin")
                 val u2 = User(0, "Admin@gmail.com", "Admin", "Admin")
-                dao.insertAll(u)
+                val u3 = User(0, "gmail@gmail.com", "User", "User")
+                dao.insertAll(u, u2, u3)
+                val d1 = Devices(0, "Ordinateur", "Dell", "Latitude 5400", "https://www.dell.com/fr-be", true,"Admin@gmail.com")
+                val d2 = Devices(0, "Ordinateur", "Dell", "Latitude 5400", "https://www.dell.com/fr-be", true,"gmail@gmail.com")
+                val dao2 = db.devicesDao()
+                dao2.insertAll(d1, d2)
             } catch (e: Exception) {
         Log.d("MainActivity", e.message.toString())
             }

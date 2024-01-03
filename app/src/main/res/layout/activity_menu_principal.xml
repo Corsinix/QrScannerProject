@@ -22,42 +22,19 @@
         android:text="Consulter la base de données des utilisateurs"
         android:visibility="gone" />
 
-    <EditText
-        android:id="@+id/editTextType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Type" />
-
-    <EditText
-        android:id="@+id/editTextMarque"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Marque" />
-
-    <EditText
-        android:id="@+id/editTextProduit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Produit" />
-
-    <EditText
-        android:id="@+id/editTextWeb"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Web" />
-
     <Button
         android:id="@+id/btnScanAdd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Scan d'ajout"
-        android:onClick="xmlClickEvent" />
-
-    <Button
-        android:id="@+id/btnScanEmprunt"
+        android:text="Scanner un produit"
+        android:onClick="xmlClickEvent"
+        android:visibility="gone"/>
+    <EditText
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Scan d'emprunt"
-        android:onClick="xmlClickEvent" />
+        android:layout_height="match_parent"
+        android:id="@+id/et_Emprunteur"
+        android:hint="Entrez le mail de l'emprunteur"
+        android:visibility="gone"/>
+
 
 </LinearLayout>

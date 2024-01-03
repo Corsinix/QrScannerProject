@@ -26,4 +26,7 @@ interface UserDao {
     fun delete(user: User)
     @Update
     fun update(user: User)
+    @Query("UPDATE users SET role = CASE WHEN role = 'Admin' THEN 'User' ELSE 'Admin' END WHERE uid = :userId")
+    fun updateUserRole(userId: Int)
+
 }

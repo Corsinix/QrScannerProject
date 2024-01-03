@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menuSortByType"
+        android:title="Trier par Type" />
+    <item
+        android:id="@+id/menuSortByMarque"
+        android:title="Trier par Marque" />
+    <item
+        android:id="@+id/menuSortByProduit"
+        android:title="Trier par Produit" />
+    <item
+        android:id="@+id/menuSortByUser"
+        android:title="Trier par Produit" />
+    <item
+        android:id="@+id/menuBack"
+        android:title="Retour" />
+</menu>
