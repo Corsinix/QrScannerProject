@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    android:background="@drawable/background">
 
     <Button
         android:id="@+id/btnConsultProducts"
@@ -29,12 +30,14 @@
         android:text="Scanner un produit"
         android:onClick="xmlClickEvent"
         android:visibility="gone"/>
+
     <EditText
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/et_Emprunteur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
         android:hint="Entrez le mail de l'emprunteur"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 
 </LinearLayout>

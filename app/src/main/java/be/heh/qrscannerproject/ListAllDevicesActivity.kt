@@ -42,7 +42,10 @@ class ListAllDevicesActivity : AppCompatActivity() {
                 val adapter = ArrayAdapter(
                     this@ListAllDevicesActivity,
                     android.R.layout.simple_list_item_1,
-                    devicesList.map { "${it.type} - ${it.marque} - ${it.produit} - ${it.web} \n${it.emprunt} : ${it.dernier_emprunt}" }
+                    devicesList.map {
+                        val empruntText = if (it.emprunt == true) "Emprunté par : " else "Non emprunté: "
+                        "${it.type} - ${it.marque} - ${it.produit} - ${it.web} \n$empruntText ${it.dernier_emprunt}"
+                    }
                 )
 
                 listView.adapter = adapter
@@ -55,6 +58,7 @@ class ListAllDevicesActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun showConfirmationDialog(websiteUrl: String?) {
         AlertDialog.Builder(this)
@@ -88,54 +92,6 @@ class ListAllDevicesActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_list_devices, menu)
         return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            // Gérer les actions du menu ici
-            R.id.menuSortByType -> sortBy("type")
-            R.id.menuSortByMarque -> sortBy("marque")
-            R.id.menuSortByProduit -> sortBy("produit")
-            R.id.menuSortByUser -> sortBy("user")
-            R.id.menuBack -> backToList()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-    private fun backToList() {
-        val userRole = intent.getSerializableExtra("userRole") as String?
-        // Retour à l'activité principale avec conservation de l'email du Super Admin
-        val intent = Intent(this@ListAllDevicesActivity, ListAllDevicesActivity::class.java)
-        if ( userRole == "SuperAdmin"){
-            intent.putExtra("userRole", "SuperAdmin") }
-        else if (userRole == "Admin"){
-            intent.putExtra("userRole", "Admin") }
-        else if (userRole == "User"){
-            intent.putExtra("userRole", "User")}
-        startActivity(intent)
-        finish()
-    }
-
-    private fun sortBy(sortField: String) {
-        AsyncTask.execute {
-            val db = Room.databaseBuilder(
-                applicationContext,
-                AppDatabase::class.java, "MyDataBase"
-            ).build()
-
-            val dao = db.devicesDao()
-            val devicesList = dao.getAllSorted(sortField)
-
-            runOnUiThread {
-                // Adapter to display sorted devices in the ListView
-                val adapter = ArrayAdapter(
-                    this@ListAllDevicesActivity,
-                    android.R.layout.simple_list_item_1,
-                    devicesList.map { "${it.type} - ${it.marque} - ${it.produit} \n${it.emprunt} : ${it.dernier_emprunt}" }
-                )
-
-                listView.adapter = adapter
-            }
-        }
     }
 
     private fun backToMain() {

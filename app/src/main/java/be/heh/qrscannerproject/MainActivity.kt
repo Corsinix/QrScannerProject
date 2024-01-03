@@ -1,43 +1,35 @@
 package be.heh.qrscannerproject
 
 import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.graphics.Color
 import android.os.AsyncTask
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
 import be.heh.qrscannerproject.database.AppDatabase
 import be.heh.qrscannerproject.database.Devices
 import be.heh.qrscannerproject.database.User
 import be.heh.qrscannerproject.databinding.ActivityMainBinding
 
-
 class MainActivity : AppCompatActivity() {
-    // private lateinit var binding: ActivityMainBinding
     private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
-        createSuperAdmin()
     }
-
-
 
     fun xmlClickEvent(v: View) {
         when (v.id) {
-        // R.id.bt_Ecrire_main -> {
-            binding.btEcrireMain.id -> sing_in()
+            binding.btEcrireMain.id -> signIn()
             binding.btLireMain.id -> login()
         }
     }
-
 
     private fun login() {
         AsyncTask.execute {
@@ -46,50 +38,91 @@ class MainActivity : AppCompatActivity() {
                 AppDatabase::class.java, "MyDataBase"
             ).build()
             val dao = db.userDao()
-            val dbL = dao?.getByMail(binding.etChildrenEmail.text.toString())
-            var uL = User(dbL?.uid?:0, dbL?.mail?:"INDEFINI",
-                dbL?.password?:"INDEFINI", dbL?.role?:"INDEFINI")
-            if (uL.password == binding.etChildrenPwd.text.toString()){
-                val intent = Intent(this, MenuPrincipal::class.java)
-                intent.putExtra("userRole", uL.role)
-                startActivity(intent)
-                finish()
-            }
-            else{
-                binding.tvEmailMain.setTextColor(Color.RED)
-                binding.tvMainPwd.setTextColor(Color.RED)
-                binding.tvMainPwd.text = "PASSWORD : " + uL.password
-                binding.tvEmailMain.text = "EMAIL : " + uL.mail
+            val email = binding.etChildrenEmail.text.toString()
+            val password = binding.etChildrenPwd.text.toString()
+            val user = dao?.getByMail(email)
+
+            runOnUiThread {
+                if (user != null) {
+                    if (user.role == "Suspended") {
+                        // Utilisateur suspendu
+                        Toast.makeText(
+                            this,
+                            "Votre compte est suspendu. Veuillez contacter l'administrateur.",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else if (user.password == password) {
+                        // Connexion réussie
+                        val intent = Intent(this, MenuPrincipal::class.java)
+                        intent.putExtra("userRole", user.role)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        // Mot de passe incorrect
+                        binding.tvEmailMain.setTextColor(Color.RED)
+                        binding.tvMainPwd.setTextColor(Color.RED)
+                        binding.tvMainPwd.text = "Mot de passe incorrect"
+                        binding.tvEmailMain.text = ""
+                    }
+                } else {
+                    // Utilisateur non trouvé
+                    binding.tvEmailMain.setTextColor(Color.RED)
+                    binding.tvMainPwd.setTextColor(Color.RED)
+                    binding.tvMainPwd.text = "Utilisateur non trouvé"
+                    binding.tvEmailMain.text = ""
+                }
             }
         }
     }
 
-    private fun sing_in() {
-            var err : String = ""
-            val u = User(0, binding.etChildrenEmail.text.toString(),
-                binding.etChildrenPwd.text.toString(), "SuperAdmin")
-            AsyncTask.execute() {
+    private fun signIn() {
+        val email = binding.etChildrenEmail.text.toString()
+        val password = binding.etChildrenPwd.text.toString()
+
+        if (isValidEmail(email) && isValidPassword(password)) {
+            AsyncTask.execute {
                 try {
                     val db = Room.databaseBuilder(
                         applicationContext,
                         AppDatabase::class.java, "MyDataBase"
                     ).build()
                     val dao = db.userDao()
-                    val u1 = User(0, u.mail, u.password, "User")
-                    dao.insertAll(u1)
+                    val user = User(0, email, password, "User")
+                    dao.insertAll(user)
+
+                    runOnUiThread {
+                        Toast.makeText(
+                            this,
+                            "Compte créer avec succès!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } catch (e: Exception) {
+                    runOnUiThread {
+                        Toast.makeText(this, "Ce compte existe", Toast.LENGTH_LONG).show()
+                    }
+                }
             }
-            catch (e: Exception){
-                err = e.message.toString()
-            }
-        }
-        try {
-        }
-        catch (e: Exception){
-            Toast.makeText(this,e.message.toString(),Toast.LENGTH_LONG).show()
+        } else {
+            Toast.makeText(
+                this,
+                "Invalide email ou password (minimum 4 charactères)",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
+
+    private fun isValidEmail(email: String): Boolean {
+        val pattern = Patterns.EMAIL_ADDRESS
+        return pattern.matcher(email).matches()
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        return password.length >= 4
+    }
+
     private fun createSuperAdmin() {
-        AsyncTask.execute() {
+        AsyncTask.execute {
             try {
                 val db = Room.databaseBuilder(
                     applicationContext,
@@ -100,12 +133,32 @@ class MainActivity : AppCompatActivity() {
                 val u2 = User(0, "Admin@gmail.com", "Admin", "Admin")
                 val u3 = User(0, "gmail@gmail.com", "User", "User")
                 dao.insertAll(u, u2, u3)
-                val d1 = Devices(0, "Ordinateur", "Dell", "Latitude 5400", "https://www.dell.com/fr-be", true,"Admin@gmail.com")
-                val d2 = Devices(0, "Ordinateur", "Dell", "Latitude 5400", "https://www.dell.com/fr-be", true,"gmail@gmail.com")
-                val dao2 = db.devicesDao()
-                dao2.insertAll(d1, d2)
             } catch (e: Exception) {
-        Log.d("MainActivity", e.message.toString())
+                runOnUiThread {
+                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+    private fun createInitialDevices() {
+        AsyncTask.execute {
+            try {
+                val db = Room.databaseBuilder(
+                    applicationContext,
+                    AppDatabase::class.java, "MyDataBase"
+                ).build()
+
+                val dao = db.devicesDao()
+
+                val d1 = Devices(0, "Ordinateur", "Dell", "Latitude 5400", "https://www.dell.com/fr-be", false, "")
+                val d2 = Devices(0, "Ordinateur", "HP", "EliteBook 840 G7", "https://www.hp.com", false, "")
+                val d3 = Devices(0, "Smartphone", "Samsung", "Galaxy S21", "https://www.samsung.com", false, "")
+
+                dao.insertAll(d1, d2, d3)
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(this, e.message.toString(), Toast.LENGTH_LONG).show()
+                }
             }
         }
     }

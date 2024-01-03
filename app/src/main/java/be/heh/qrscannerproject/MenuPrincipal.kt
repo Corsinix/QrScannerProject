@@ -48,6 +48,7 @@ class MenuPrincipal : AppCompatActivity() {
     }
 
     private fun setupScanner() {
+        qrScanIntegrator?.setOrientationLocked(false)
         qrScanIntegrator = IntentIntegrator(this)
     }
 
@@ -120,16 +121,14 @@ class MenuPrincipal : AppCompatActivity() {
                 try {
                     val obj = JSONObject(result.contents)
                     scannedData = result.contents
-                    val emprunt: Boolean = obj.getString("emprunt") == "true"
                     scannedDevice = Devices(
                         0,
                         obj.getString("type"),
                         obj.getString("marque"),
                         obj.getString("produit"),
                         obj.getString("web"),
-                        emprunt,
-                        obj.getString("dernier_emprunt")
-                    )
+                        false,
+            "")
                     showConfirmationDialog(scannedDevice!!)
                 }
                 catch (e: JSONException) {

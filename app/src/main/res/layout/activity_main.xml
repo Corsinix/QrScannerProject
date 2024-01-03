@@ -6,7 +6,14 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/background">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="300px"
+        app:srcCompat="@drawable/iconlogin" />
 
     <TextView
         android:layout_width="match_parent"
@@ -14,7 +21,9 @@
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
         android:gravity="center"
-        android:text="**INSCRIPTION** " />
+        android:text="HEH Gestion"
+        android:textSize="34sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tv_email_main"
@@ -22,8 +31,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
-        android:text="EMAIL :" />
+        android:gravity="center"
+        android:text="EMAIL :"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/et_children_email"
@@ -31,9 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:autoLink="email"
-        android:text="your mail"
         android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical" />
+        android:gravity="center"
+        android:text="\@std.heh.be" />
 
     <TextView
         android:id="@+id/tv_main_pwd"
@@ -41,8 +52,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
-        android:text="PASSWORD :" />
+        android:gravity="center"
+        android:text="PASSWORD :"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/et_children_pwd"
@@ -50,9 +63,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:foregroundGravity="center_vertical"
-        android:gravity="center_vertical"
-        android:password="true"
-        android:text="password"/>
+        android:gravity="center"
+        android:password="true" />
 
 
     <Button
@@ -63,7 +75,9 @@
         android:foregroundGravity="center_vertical"
         android:gravity="center"
         android:onClick="xmlClickEvent"
-        android:text="sing in" />
+        android:text="sing in"
+        android:textColorHighlight="#B5D8FE"
+        android:textColorLink="#8DC4FF" />
 
     <Button
         android:id="@+id/bt_Lire_main"
@@ -73,7 +87,9 @@
         android:foregroundGravity="center_vertical"
         android:gravity="center"
         android:onClick="xmlClickEvent"
-        android:text="Login" />
+        android:text="Login"
+        android:textColorHighlight="#B5D8FE"
+        android:textColorLink="#8DC4FF" />
 
 
 </androidx.appcompat.widget.LinearLayoutCompat>

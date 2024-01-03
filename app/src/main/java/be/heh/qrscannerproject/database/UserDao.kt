@@ -28,5 +28,11 @@ interface UserDao {
     fun update(user: User)
     @Query("UPDATE users SET role = CASE WHEN role = 'Admin' THEN 'User' ELSE 'Admin' END WHERE uid = :userId")
     fun updateUserRole(userId: Int)
+    @Query("UPDATE users SET role = CASE " +
+            "WHEN role = 'User' THEN 'Suspended' " +
+            "WHEN role = 'Admin' THEN 'Suspended' " +
+            "WHEN role = 'Suspended' THEN 'User' END " +
+            "WHERE uid = :userId")
+    fun toggleUserRole(userId: Int)
 
 }
