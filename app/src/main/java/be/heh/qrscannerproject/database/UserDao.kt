@@ -18,6 +18,8 @@ interface UserDao {
     fun getByMail(mail: String): User
     @Query("SELECT * FROM users WHERE role != 'SuperAdmin'")
     fun getwithoutSuperAdmin(): List<User>
+    @Query("SELECT COUNT(*) FROM users")
+    fun getCount(): Int
 
     //insert, update, delete
     @Insert

@@ -86,14 +86,24 @@ class MainActivity : AppCompatActivity() {
                         applicationContext,
                         AppDatabase::class.java, "MyDataBase"
                     ).build()
-                    val dao = db.userDao()
-                    val user = User(0, email, password, "User")
-                    dao.insertAll(user)
+                    val userDao = db.userDao()
+
+                    // Vérifier s'il s'agit du premier utilisateur
+                    val isFirstUser = userDao.getCount() == 0
+
+                    val userRole = if (isFirstUser) {
+                        "SuperAdmin" // Si c'est le premier utilisateur, définir comme superadmin
+                    } else {
+                        "User" // Sinon, définir comme utilisateur normal
+                    }
+
+                    val user = User(0, email, password, userRole)
+                    userDao.insertAll(user)
 
                     runOnUiThread {
                         Toast.makeText(
                             this,
-                            "Compte créer avec succès!",
+                            "Compte créé avec succès!",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -106,11 +116,12 @@ class MainActivity : AppCompatActivity() {
         } else {
             Toast.makeText(
                 this,
-                "Invalide email ou password (minimum 4 charactères)",
+                "Email ou mot de passe invalide (minimum 4 caractères)",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
+
 
     private fun isValidEmail(email: String): Boolean {
         val pattern = Patterns.EMAIL_ADDRESS
